@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="static/stylesheets/main.css">
+    <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+</head>
+
+<body ng-app="surveyPlatform">
+    <iframe style="display:none" height="0" width="0" id="loader"></iframe>
+    <div ng-controller="AppCtrl" layout="column" layout-fill>
+        <md-toolbar class="md-primary md-hue-2">
+            <div class="md-toolbar-tools" style="min-height: 64px;">
+                <span class="md-flex" style="font-family: 'Indie Flower', cursive;">Musiquery</span>
+            </div>
+            <md-button class="md-fab md-primary md-hue-2" ng-click="toggleLeft()" aria-label="button" id="sub-nav-button">
+                <md-icon icon="bower_components/material-design-icons/navigation/svg/design/ic_menu_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+            </md-button>
+            <div layout="row" id="search-box" layout-fill>
+                <div flex="75">
+                    <input type="text" placeholder="제목, 가수, 가사로 검색해보세요." ng-model="searchQuery" class="search-input">
+                </div>
+                <div flex="25">
+                    <md-button class="md-raised md-primary" ng-click="executeSearch(searchQuery)" class="search-button" style="font-family: 'Indie Flower', cursive;">Go Music!</button>
+                </div>
+            </div>
+            <header id="sub-header">"{{ searchQuery }}"로 총 {{ resultsNumber }}개의 곡이 검색되었습니다.</header>
+        </md-toolbar>
+        <section layout="row" flex>
+            <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" id="sub-nav">
+                <md-toolbar class="md-theme-light md-hue-2">
+                    <h1 class="md-toolbar-tools">뮤직큐리</h1>
+                </md-toolbar>
+                <md-content ng-controller="LeftCtrl" class="md-padding">
+                    <!-- <md-button ng-click="close()" class="md-primary">
+                    Close Sidenav Right
+                    </md-button> -->
+                    <p>뮤직큐리는 딥링크를 이용한 음악 검색엔진입니다. 원하시는 음악을 제목, 가수, 가사 등을 이용해서 검색하신 후 설치된 앱 중에서 하나를 골라서 재생해주세요.</p>
+                    <ul>
+                        <li>네이버뮤직</li>
+                        <li>벅스</li>
+                        <li>멜론</li>
+                        <li>비트</li>
+                        <li>유튜브</li>
+                        <li>사운드클라우드(웹)</li>
+                    </ul>
+                    <p class="copyright">Copyright © Team Tehran Slippers 2015</p>
+                </md-content>
+            </md-sidenav>
+
+        </section>
+        <div id="main-content">
+            <div layout="row" layout-fill id="progress-circular">
+                <div flex="30" flex-sm="10"></div>
+                <div flex="40" flex-sm="80" layout="column">
+                    <div layout="row" layout-align="center center">
+                        <md-progress-circular class="md-primary" md-mode="indeterminate"></md-progress-circular>
+                    </div>
+                    <div layout="row" layout-align="center center">
+                        <p>음악 정보를 수집 중입니다.</p>
+                    </div>
+                </div>
+                <div flex="30" flex-sm="10"></div>
+            </div>
+            <ul flex layout="column">
+                <li ng-repeat="item in results" class="animation" layout="row" ng-click="showBottomGrid($parent.index=$index)" flex>
+                    <div flex="15" flex-sm="25" style="height: 100px; width: 150px;">
+                        <div style="background-image: url('{{item.music_info.image_url}}'); background-size: contain; background-repeat: no-repeat; background-position: center center; width: 100%; height: 100%;"></div>
+                    </div>
+                    <div flex="60" flex-sm="60" id="result-text-box">
+                        <h3>{{item.music_info.title}}</h3>
+                        <h4>{{item.music_info.album}}</h4>
+                        <p>
+                            By {{item.music_info.artist}}
+                        </p>
+                    </div>
+                    <div flex="25" flex-sm="15">
+                        <div ng-repeat="deeplink in item.deeplinks">
+                            <div ng-switch="deeplink.name">
+                                <div ng-switch-when="beat">
+                                    <img src="static/images/Beat.png" alt="">
+                                </div>
+                                <div ng-switch-when="navermusic">
+                                    <img src="static/images/Navermusic.png" alt="">
+                                </div>
+                                <div ng-switch-when="youtube">
+                                    <img src="static/images/Youtube.png" alt="">
+                                </div>
+                                <div ng-switch-when="melon">
+                                    <img src="static/images/Melon.png" alt="">
+                                </div>
+                                <div ng-switch-when="bugs">
+                                    <img src="static/images/Bugs.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="bower_components/hammerjs/hammer.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
