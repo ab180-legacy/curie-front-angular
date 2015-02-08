@@ -71,15 +71,15 @@
                     <div flex="15" flex-sm="25" style="height: 100px; width: 150px;">
                         <div style="background-image: url('{{item.music_info.image_url}}'); background-size: contain; background-repeat: no-repeat; background-position: center center; width: 100%; height: 100%;"></div>
                     </div>
-                    <div flex="60" flex-sm="60" id="result-text-box">
+                    <div flex="55" flex-sm="60" id="result-text-box">
                         <h3>{{item.music_info.title}}</h3>
                         <h4>{{item.music_info.album}}</h4>
                         <p>
                             By {{item.music_info.artist}}
                         </p>
                     </div>
-                    <div flex="25" flex-sm="15">
-                        <div ng-repeat="deeplink in item.deeplinks">
+                    <div flex="30" flex-sm="15" id="result-image-box">
+                        <div ng-repeat="deeplink in item.deep_links">
                             <div ng-switch="deeplink.name">
                                 <div ng-switch-when="beat">
                                     <img src="static/images/Beat.png" alt="">

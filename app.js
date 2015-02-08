@@ -131,9 +131,15 @@ app.controller("AppCtrl", ["$scope", "$rootScope", "$timeout", "$mdSidenav", "$l
 
         $scope.executeSearch = function() {
             $("#progress-circular").show(500);
-            $http.post("http://128.199.76.251:5000/search/", {
-                type: "music",
-                query: $scope.searchQuery
+
+            // function angular.callbacks._0(data){
+            //     console.log("inside callback", data);
+            // }
+
+            $http({
+                method: 'jsonp',
+                url: "http://128.199.76.251:5000/result?type=music&query=" + $scope.searchQuery + "&callback=JSON_CALLBACK",
+                responseType: "json"
             }).
             success(function(data, status, headers, config) {
                 $("#progress-circular").hide(500);
