@@ -1,34 +1,3 @@
-$(document).on('touchmove', function(e) {
-    e.preventDefault();
-});
-         
-window.closeWindow = (function() {            
-    var isWindowRef = null;            
-    setInterval(function() {
-        // 새로열린 창이 닫혔을 때 다시 버튼 클릭 시 동작이 실행이 되어야 하므로 해당 객체를 삭제
-        isWindowRef = (isWindowRef && isWindowRef.window) ? isWindowRef : null;            
-    }, 1000);
-                 
-    return function(windowRef, time, redirectUrl) {                 
-        // 새로열린 Window에서 백버튼 누를 시 해당 함수가 계속 호출되는 무한루프 방지                 
-        if (isWindowRef == null) {                    
-            isWindowRef = windowRef;                     
-            setTimeout(function() {                        
-                try {                             
-                    // Custom Scheme 이 실행되지 않고 잘못된 페이지가 노출된 상태에서
-                    // 아래의 코드 실행 시 Security Error 발생
-                    windowRef.location == 'undefind';                              
-                    // Custom Scheme 이 실행되었다면 앱 종료 후 해당 tab 을 닫는다.                                  
-                    windowRef.close();                         
-                } catch (e) {                            
-                    windowRef.location.href = redirectUrl;                        
-                }                    
-            }, time);                    
-            return true;                
-        }            
-    }        
-})();         
-
 var app = angular.module("surveyPlatform", ["ngRoute", "ngAnimate", "ngMaterial"]);
 
 // app.config(['$routeProvider',
@@ -193,8 +162,29 @@ app.controller('bottomGridController', ["$scope", "$rootScope", "$mdBottomSheet"
         $scope.items = resource.readGridData();
         $scope.listItemClick = function($index, name, deeplink, marketlink) {
             if (resource.device["android"]) {
-                // $window.location.href = deeplink;
-                var openWindow = window.open('./openWindow.html#' + deeplink + "#" + marketlink);
+                if (navigator.userAgent.match(/Chrome/)) {
+                    // chrome
+                    if(name === "navermusic"){
+                        $window.location.href = deeplink;
+                    } else {
+                        window.setTimeout(function(){
+                            $window.location.href = marketlink;
+                        }, 1000)
+                        $window.location.href = deeplink;
+                    }
+                } else if (navigator.userAgent.match(/Firefox/)) {
+                    // firefox
+                    document.location = deeplink;
+                    window.setTimeout(function () {
+                        document.location = marketlink;
+                    }, 1000);
+                } else {
+                    // other browsers
+                    window.setTimeout(function() {
+                        document.getElementById("loader").src = marketlink;
+                    }, 1000);
+                    document.getElementById("loader").src = deeplink;    
+                }
             } else if (resource.device["ios"]) {
                 window.setTimeout(function() {
                     document.getElementById("loader").src = marketlink;
