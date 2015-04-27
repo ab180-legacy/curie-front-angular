@@ -107,7 +107,7 @@ app.controller("AppCtrl", ["$scope", "$rootScope", "$timeout", "$mdSidenav", "$l
 
             $http({
                 method: 'jsonp',
-                url: "http://128.199.76.251:5000/result?type=music&query=" + $scope.searchQuery + "&callback=JSON_CALLBACK",
+                url: "http://tehranslippers.com:5000/result?type=music&query=" + $scope.searchQuery + "&callback=JSON_CALLBACK",
                 responseType: "json"
             }).
             success(function(data, status, headers, config) {
@@ -183,7 +183,7 @@ app.controller('bottomGridController', ["$scope", "$rootScope", "$mdBottomSheet"
                     window.setTimeout(function() {
                         document.getElementById("loader").src = marketlink;
                     }, 1000);
-                    document.getElementById("loader").src = deeplink;    
+                    document.getElementById("loader").src = deeplink;
                 }
             } else if (resource.device["ios"]) {
                 window.setTimeout(function() {
